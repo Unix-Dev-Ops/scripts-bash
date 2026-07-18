@@ -1,0 +1,45 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: bash -n shipped scripts
+        run: |
+          set -euo pipefail
+          root="skills/software-development/scripts-bash"
+          test -f "$root/SKILL.md"
+          test -f "$root/references/authoring.md"
+          test -f "$root/references/screaming-snake-case-variables.md"
+          for f in \
+            "$root/references/template-base.sh" \
+            "$root/templates/template-base.sh" \
+            "$root/examples/minimal-service-installer.sh"
+          do
+            echo "bash -n $f"
+            bash -n "$f"
+          done
+          echo "OK"
+
+      - name: shellcheck (non-blocking if missing)
+        run: |
+          if command -v shellcheck >/dev/null 2>&1; then
+            shellcheck -x skills/software-development/scripts-bash/references/template-base.sh \
+              skills/software-development/scripts-bash/templates/template-base.sh \
+              skills/software-development/scripts-bash/examples/minimal-service-installer.sh
+          else
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq shellcheck
+            shellcheck -x skills/software-development/scripts-bash/references/template-base.sh \
+              skills/software-development/scripts-bash/templates/template-base.sh \
+              skills/software-development/scripts-bash/examples/minimal-service-installer.sh
+          fi
