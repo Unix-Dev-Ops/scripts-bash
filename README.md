@@ -7,13 +7,9 @@
 
 > **MCP gives Hermes tools. Skills give Hermes judgment. `scripts-bash` gives Hermes a standard for the bash that runs your stack.**
 
-Drop-in [Hermes Agent](https://github.com/NousResearch/hermes-agent) skill for **long-lived bash installer and manager scripts** - the kind you keep for years, not throwaway one-liners.
-
-<!-- Hero: add docs/assets/scripts-bash-hero.png (Toni-style cyberpunk Hermes + terminal HUD) then uncomment:
-![scripts-bash hero - Hermes-grade bash installers](docs/assets/scripts-bash-hero.png)
--->
-
 **Current skill version: v4.2.0**
+
+![scripts-bash hero - Hermes-grade bash installers](docs/assets/scripts-bash-hero.png)
 
 ## Why this exists
 
