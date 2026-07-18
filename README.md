@@ -1,34 +1,37 @@
 # scripts-bash
 
-**A [Hermes Agent](https://github.com/NousResearch/hermes-agent) skill** for writing excellent long-lived bash installer and manager scripts.
+[![validate](https://github.com/Unix-Dev-Ops/scripts-bash/actions/workflows/validate.yml/badge.svg)](https://github.com/Unix-Dev-Ops/scripts-bash/actions/workflows/validate.yml)
+[![Hermes Skill](https://img.shields.io/badge/Hermes-Skill-7c3aed?style=flat-square)](https://github.com/NousResearch/hermes-agent)
+[![Category](https://img.shields.io/badge/category-software--development-0ea5e9?style=flat-square)](#install)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
-Drop it into Hermes. Load the skill. Copy the template. Ship installers that look and behave like a real ops toolkit - not vibecoded one-offs.
+> **MCP gives Hermes tools. Skills give Hermes judgment. `scripts-bash` gives Hermes a standard for the bash that runs your stack.**
 
-| | |
-|--|--|
-| **For** | [Hermes Agent](https://hermes-agent.nousresearch.com/) by Nous Research |
-| **Category** | `software-development` (bash / installers / automation) |
-| **Author** | [Vituvo](https://github.com/Unix-Dev-Ops) (`Unix-Dev-Ops`) |
-| **License** | MIT |
-| **Install path** | `~/.hermes/skills/software-development/scripts-bash/` |
+Drop-in [Hermes Agent](https://github.com/NousResearch/hermes-agent) skill for **long-lived bash installer and manager scripts** - the kind you keep for years, not throwaway one-liners.
 
-> This repository is **only** the Hermes skill package. It is not a Kaggle project, not a Google ADK app, and not a dump of private host installers.
+<!-- Hero: add docs/assets/scripts-bash-hero.png (Toni-style cyberpunk Hermes + terminal HUD) then uncomment:
+![scripts-bash hero - Hermes-grade bash installers](docs/assets/scripts-bash-hero.png)
+-->
 
-## Why Hermes
+**Current skill version: v4.2.0**
 
-Hermes already runs your terminal, files, profiles, and cron. What it often lacks out of the box is a **strict house style** for the bash that manages real services (Docker, local inference, agent stack tools).
+## Why this exists
 
-`scripts-bash` gives Hermes:
+Hermes already orchestrates terminal, files, profiles, cron, and secrets. What it still needs for serious ops work is a **rigid house style** so every installer looks the same, fails cleanly, and reads like a product - not vibecode.
 
-- A locked **header + color + spinner + ROUTINE/case** standard
-- An executable **template** agents copy instead of freestyling
-- A **SCREAMING_SNAKE** global registry so names stay stable
-- An **authoring recipe** so humans and agents create the same quality
-- Hard gates: `bash -n`, full scripts, no secret dumps, products outside the skill tree
+`scripts-bash` teaches Hermes (and you) to ship bash with:
 
-Use it so Hermes output matches production ops scripts - cinematic logs, clean Ctrl+C, idempotent install paths - the kind of bash you keep for years.
+| Pillar | What you get |
+|--------|----------------|
+| **Locked skeleton** | Header, colors, spinners, `ROUTINE` + `case`, `sexit` footer |
+| **Stable names** | SCREAMING_SNAKE globals with a living registry |
+| **Authoring recipe** | 5-step path from intent to verified script |
+| **Craft bar** | Quote discipline, `[[ ]]`, dryrun, idempotent install, no secret dumps |
+| **Lean package** | Skill law only - your host installers stay in your workspace |
 
-## Install (drop-in)
+Complements Hermes. Does not replace it. Does not claim to be a general "learn bash" course.
+
+## Install (Hermes drop-in)
 
 ```bash
 git clone https://github.com/Unix-Dev-Ops/scripts-bash.git
@@ -44,50 +47,92 @@ In a Hermes session:
 /skill scripts-bash
 ```
 
-Optional: mirror into a profile:
+Optional profile mirror (e.g. a coding profile):
 
 ```bash
 cp -a ~/.hermes/skills/software-development/scripts-bash \
   ~/.hermes/profiles/<profile>/skills/
 ```
 
-## Quick use
+Standing rule (recommended in SOUL / AGENTS):
 
 ```text
-Load scripts-bash. Copy the template to
-workspace/installers/mytool/installer-mytool.sh
-Purpose: manage mytool. Routines: install, status, uninstall.
-No sudo.
+For long-lived bash installer/manager scripts: load skill scripts-bash first.
+Products go under profile workspace/installers/ or workspace/scripts/.
 ```
 
-Read **`skills/software-development/scripts-bash/references/authoring.md`** for the full 5-step recipe.
+## Quickstart
+
+```text
+Load scripts-bash.
+Copy templates/template-base.sh to workspace/installers/mytool/installer-mytool.sh
+Purpose: manage mytool on port 9090.
+Routines: install, update, start, stop, status, uninstall.
+No sudo. Paths under ~/.hermes-programs/mytool/.
+```
+
+Then verify:
+
+```bash
+bash -n workspace/installers/mytool/installer-mytool.sh
+# shellcheck if available
+bash workspace/installers/mytool/installer-mytool.sh status
+```
+
+Full walkthrough: [`skills/software-development/scripts-bash/references/authoring.md`](skills/software-development/scripts-bash/references/authoring.md)
 
 ## Package layout
 
 ```text
 skills/software-development/scripts-bash/
-  SKILL.md                                 # Hermes skill entry (frontmatter)
-  references/template-base.sh              # executable skeleton
-  references/screaming-snake-case-variables.md
-  references/authoring.md                  # how to create excellent scripts
+  SKILL.md                                      # Hermes skill entry
+  references/template-base.sh                   # executable skeleton (source of truth)
+  references/screaming-snake-case-variables.md  # global name registry
+  references/authoring.md                       # how to create excellent scripts
   templates/template-base.sh
-  examples/minimal-service-installer.sh    # ship-safe sample only
+  examples/minimal-service-installer.sh         # ship-safe sample only
   README.md / PUBLISH.md
 ```
 
-**Not in this repo:** private production installers, host design briefs, API keys.
+**Not in this repo:** private production installers, host design briefs, API keys, Kaggle/Google app code.
 
-## Contributing / maintainers
+## What "good" looks like
 
-- [CONTRIBUTING.md](CONTRIBUTING.md) - PRs, conventional commits, review bar
-- [MAINTAINERS.md](MAINTAINERS.md) - branch protection expectations
-- [SECURITY.md](SECURITY.md) - private vulnerability reports
-- CODEOWNERS requires review from **@Unix-Dev-Ops**
+- Author / Date / Ver / Name / Define header (column-aligned)
+- Braille spinners + clean Ctrl+C (`SPINNER_PID` + trap)
+- Green labels, cyan body, bright-red errors - cinematic `sleep 0.05` pacing
+- `cmd_exit=$?` **before** `stop_spinner`
+- `show_usage` exits 0 **without** the Completd footer; success paths end in `sexit`
+- Prefer explicit failure checks on large installers (house style); do not blind-apply `set -e`
+
+## Contributing
+
+PRs welcome. Maintainer review required.
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) - workflow, checklist, conventional commits
+- [MAINTAINERS.md](MAINTAINERS.md) - branch protection / merge style
+- [SECURITY.md](SECURITY.md) - private vuln reports
+- [CODEOWNERS](.github/CODEOWNERS) - `@Unix-Dev-Ops`
+
+```bash
+bash -n skills/software-development/scripts-bash/references/template-base.sh
+bash -n skills/software-development/scripts-bash/templates/template-base.sh
+bash -n skills/software-development/scripts-bash/examples/minimal-service-installer.sh
+```
 
 ## Related
 
-- Hermes Agent: https://github.com/NousResearch/hermes-agent  
-- Hermes docs: https://hermes-agent.nousresearch.com/docs  
+| Project | Role |
+|---------|------|
+| [Hermes Agent](https://github.com/NousResearch/hermes-agent) | The agent this skill serves |
+| [Hermes docs](https://hermes-agent.nousresearch.com/docs) | Official documentation |
+| Skills hub / local skills | Drop-in path under `~/.hermes/skills/` |
+
+## Author
+
+**Vituvo** ([@Unix-Dev-Ops](https://github.com/Unix-Dev-Ops))
+
+Built for real Hermes operators who manage Docker, local inference, and agent infrastructure with bash that does not apologize.
 
 ## License
 
