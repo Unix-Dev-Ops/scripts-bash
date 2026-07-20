@@ -1,7 +1,7 @@
 ---
 name: scripts-bash
 description: "Use when creating, writing, rewriting, revising, restyling, or reviewing any bash (.sh) installer/manager/automation script—especially short user prompts like 'rewrite this script: /path/foo.sh'. Auto-applies rigid ops-script standard: fixed header, SCREAMING_SNAKE_CASE, ANSI logs, spinners, ROUTINE/case, sexit, craft bar. On rewrite: write version-bumped sibling (name.sh→name-01.sh, name-01.sh→name-02.sh); do not overwrite source unless asked."
-version: 4.2.2
+version: 4.2.3
 author: Vituvo
 license: MIT
 platforms: [linux]
@@ -178,7 +178,7 @@ House style uses **explicit exit checks** + `sexit; exit 1`. Do **not** slap `se
 | Secrets | Never embed keys/tokens. |
 | shellcheck | Run when available; justify remaining warnings. |
 | Port conflicts | Document and enforce mutual exclusion. |
-| Dual skill installs | Edit global skill first; `cp -a` to profile mirror and git repo skill tree. |
+| Publish | Edit live skill under `~/.hermes/skills/software-development/scripts-bash/`; copy into git package only when releasing. |
 
 ## Pitfalls
 
@@ -193,6 +193,7 @@ House style uses **explicit exit checks** + `sexit; exit 1`. Do **not** slap `se
 
 ## Version
 
+- **4.2.3** — Single live install; no profile skill copy; git = publish only
 - **4.2.2** — Auto rewrite triggers; version-bump output paths (name.sh→name-01.sh…)
 - **4.2.1** — Single template at `templates/template-base.sh`; removed duplicate references/examples copies
 - **4.2.0** — Craft bar; SOUL/AGENTS alignment

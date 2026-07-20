@@ -1,6 +1,12 @@
 # Publish checklist (scripts-bash)
 
-## Ship this tree only
+## Live install (Hermes)
+
+`~/.hermes/skills/software-development/scripts-bash/`
+
+## Git repo (ship)
+
+`~/.hermes/projects/scripts-bash/`
 
 ```text
 skills/software-development/scripts-bash/
@@ -12,15 +18,13 @@ skills/software-development/scripts-bash/
   references/authoring.md
 ```
 
-## This machine — three installs (keep identical)
+## Release flow
 
-| Role | Path |
-|------|------|
-| Global | `~/.hermes/skills/software-development/scripts-bash/` |
-| coder-bash profile | `~/.hermes/profiles/coder-bash/skills/scripts-bash/` |
-| Git push | `~/.hermes/projects/scripts-bash/` |
+1. Edit/test live skill under `~/.hermes/skills/software-development/scripts-bash/`
+2. Copy into git package path above
+3. Commit + push from `~/.hermes/projects/scripts-bash`
 
-Do **not** remove the global skill. After edits: `cp -a` across all three.
+No profile skill copy. No triple live installs.
 
 ## Checks
 
