@@ -20,9 +20,8 @@ All PRs require review from CODEOWNERS before merge.
 6. **Verify before push:**
 
 ```bash
-bash -n skills/software-development/scripts-bash/references/template-base.sh
 bash -n skills/software-development/scripts-bash/templates/template-base.sh
-bash -n skills/software-development/scripts-bash/examples/minimal-service-installer.sh
+bash -n skills/software-development/scripts-bash/templates/template-base.sh
 # shellcheck if available
 ```
 

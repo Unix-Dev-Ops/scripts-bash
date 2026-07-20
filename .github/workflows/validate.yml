@@ -13,33 +13,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: bash -n shipped scripts
+      - name: bash -n shipped script
         run: |
           set -euo pipefail
           root="skills/software-development/scripts-bash"
           test -f "$root/SKILL.md"
           test -f "$root/references/authoring.md"
           test -f "$root/references/screaming-snake-case-variables.md"
-          for f in \
-            "$root/references/template-base.sh" \
-            "$root/templates/template-base.sh" \
-            "$root/examples/minimal-service-installer.sh"
-          do
-            echo "bash -n $f"
-            bash -n "$f"
-          done
+          test -f "$root/templates/template-base.sh"
+          test ! -e "$root/references/template-base.sh"
+          test ! -e "$root/examples"
+          bash -n "$root/templates/template-base.sh"
           echo "OK"
 
-      - name: shellcheck (non-blocking if missing)
+      - name: shellcheck
         run: |
-          if command -v shellcheck >/dev/null 2>&1; then
-            shellcheck -x skills/software-development/scripts-bash/references/template-base.sh \
-              skills/software-development/scripts-bash/templates/template-base.sh \
-              skills/software-development/scripts-bash/examples/minimal-service-installer.sh
-          else
-            sudo apt-get update -qq
-            sudo apt-get install -y -qq shellcheck
-            shellcheck -x skills/software-development/scripts-bash/references/template-base.sh \
-              skills/software-development/scripts-bash/templates/template-base.sh \
-              skills/software-development/scripts-bash/examples/minimal-service-installer.sh
-          fi
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq shellcheck
+          shellcheck -x skills/software-development/scripts-bash/templates/template-base.sh

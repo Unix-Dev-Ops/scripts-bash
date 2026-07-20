@@ -7,7 +7,7 @@ How to use this skill to produce excellent long-lived bash installer/manager scr
 | Layer | Role |
 |-------|------|
 | **Skill** | Law: structure, colors, spinners, naming, gates |
-| **Template** | Skeleton you copy, never freestyle past |
+| **Template** | `templates/template-base.sh` — only skeleton; copy it, never freestyle past it |
 | **Brief** (optional) | Intent: ports, routines, paths, non-goals |
 | **Product** | The `.sh` you run, under profile `workspace/` |
 
@@ -21,16 +21,12 @@ You are not "vibe coding from zero." You are **filling a rigid form** with domai
 /skill scripts-bash
 ```
 
-Or ensure the session can see `software-development/scripts-bash`.
-
 ### 2. Read the skeleton and registry
 
-1. `references/template-base.sh` (or `templates/template-base.sh`)
+1. `templates/template-base.sh` (single executable truth)
 2. `references/screaming-snake-case-variables.md` before inventing globals
 
 ### 3. Pick a product path
-
-Under the active profile workspace:
 
 ```text
 workspace/installers/<tool>/installer-<tool>.sh
@@ -42,75 +38,51 @@ Never write live products into the skill package.
 
 ### 4. State intent (brief)
 
-Give the agent (or write a short `DESIGN.md` next to the product) at least:
+- Purpose, upstream, paths, ports/conflicts, routines, non-goals, sudo yes/no
 
-- **Purpose** — one sentence
-- **Upstream** — repo/image if any
-- **Paths** — install root, config, data
-- **Ports / conflict** — what binds, what must stop first
-- **Routines** — `install|update|status|...`
-- **Non-goals** — what this script must not do
-- **Elevated ops** — sudo only if you explicitly allow it
-
-Example user message:
+Example:
 
 ```text
-Load scripts-bash. Copy the template to
+Load scripts-bash. Copy templates/template-base.sh to
 workspace/installers/mytool/installer-mytool.sh
 Purpose: manage mytool docker on port 9090.
 Routines: install, update, start, stop, status, uninstall.
 No sudo. Paths under ~/.hermes-programs/mytool/.
 ```
 
-### 5. Hard gate before you accept the script
+### 5. Hard gate
 
 ```bash
 bash -n path/to/script.sh
 # shellcheck if available
 ```
 
-Agent should:
-
-- Return **full** script, not a fragment
-- Confirm **path + size** only (no full dump in chat)
-- Bump `Ver` on edits
-- Leave Title Case section comments alone unless you asked to change them
+Agent: full script only; path+size in chat; bump Ver; leave Title Case comments alone unless asked.
 
 ## What good output looks like
 
-- Header: Author / Date / Ver / Name / Define, columns aligned
+- Header Author/Date/Ver/Name/Define, columns aligned
 - `ROUTINE` + `check_arguments` + `case` + final `sexit`
-- Shared helpers from template (trap, spinners, colors) unchanged in spirit
-- New globals added to the registry (append-only)
-- Idempotent install/status where claimed
-- Failures: clear `RR` error lines, then `sexit; exit 1`
+- Helpers from template unchanged in spirit
+- New globals appended to registry
 - `cmd_exit=$?` before `stop_spinner`; `dryrun` when useful
-- See SKILL.md **Craft bar** for quote / `[[ ]]` / secrets / shellcheck
+- See SKILL.md **Craft bar**
 
 ## What bad output looks like
 
-- New banner system, random emoji logging, unquoted DEBUG
-- `START` as timer (collides with `start` routine)
-- `show_usage` printing Completd/Time footer
-- Secrets in the script body
-- Partial "here's the install function only"
+- New banner system, emoji logging, unquoted DEBUG
+- `START` as timer; `show_usage` with Completd footer
+- Secrets in script body
+- Partial "here's only the install function"
+- Second copy of the template inside the skill
 
 ## Local design briefs (optional)
 
-On a maintainer machine, product-specific briefs may live next to the workspace products, e.g.:
-
-```text
-workspace/prompts/installers/<tool>.md
-```
-
-Those are **not** part of the hub skill. They are private memory for regenerating or reviewing your own installers. The skill only needs this authoring recipe + template + registry.
+Host-only product briefs may live under profile `workspace/prompts/` — not in this skill package.
 
 ## Friend / review smoke test
 
-1. Install lean `scripts-bash` under `~/.hermes/skills/software-development/`
-2. `/reload-skills` or new session
-3. Ask: copy template to a throwaway path; add `status` that prints OK
-4. Run `bash -n` and `bash that-script.sh status`
-5. Confirm header, colors, Completd/Time footer on success path
-
-If that works, the skill is doing its job.
+1. Install lean skill under `~/.hermes/skills/software-development/scripts-bash/`
+2. `/skill scripts-bash`
+3. Copy `templates/template-base.sh` to a throwaway path; add `status` that prints OK
+4. `bash -n` and run `status`

@@ -7,33 +7,30 @@ skills/software-development/scripts-bash/
   SKILL.md
   README.md
   PUBLISH.md
-  references/template-base.sh
+  templates/template-base.sh
   references/screaming-snake-case-variables.md
   references/authoring.md
-  templates/template-base.sh
-  examples/minimal-service-installer.sh
 ```
 
 ## Do not ship
 
+- Duplicate skeletons (`references/template-base.sh`, `examples/` clone)
 - Full production installer trees
 - Profile `workspace/prompts/` design briefs
-- Symlinks into a private profile workspace
-- Hostnames, API keys, machine-local paths as requirements
-- Duplicate archives of old SKILL.md versions
+- Symlinks
+- Secrets / host-private paths as requirements
 
 ## Checks
 
 ```bash
-bash -n references/template-base.sh
 bash -n templates/template-base.sh
-bash -n examples/minimal-service-installer.sh
 # frontmatter: name, description starts with "Use when"
 ```
 
-## Local dual install (optional)
+## Local installs
 
 Canonical: `~/.hermes/skills/software-development/scripts-bash/`  
 Mirror: `~/.hermes/profiles/<name>/skills/scripts-bash/`  
+Git: `~/.hermes/projects/scripts-bash/skills/software-development/scripts-bash/`
 
-After edits: copy canonical → mirror. Products stay in profile `workspace/`.
+After edits: update canonical, then `cp -a` to profile mirror and git skill tree.

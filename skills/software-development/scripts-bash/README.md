@@ -5,14 +5,12 @@ Lean Hermes skill: rigid standard for long-lived bash installer/manager scripts.
 ## Contents
 
 - `SKILL.md` — agent rules
-- `references/template-base.sh` — executable skeleton
+- `templates/template-base.sh` — **only** executable skeleton
 - `references/screaming-snake-case-variables.md` — global name registry
-- `references/authoring.md` — tutorial (how to create excellent scripts with this skill)
-- `templates/template-base.sh` — same skeleton
-- `examples/minimal-service-installer.sh` — ship-safe sample only
+- `references/authoring.md` — how to create excellent scripts
 - `PUBLISH.md` — hub notes
 
-**Not included:** production installers, host-specific design briefs, large archives.
+**Not included:** production installers, host briefs, duplicate templates, examples clone.
 
 ## Install
 
@@ -23,7 +21,7 @@ cp -a scripts-bash ~/.hermes/skills/software-development/
 cp -a scripts-bash ~/.hermes/profiles/<profile>/skills/
 ```
 
-Reload skills in session.
+Reload skills in session. Load: `/skill scripts-bash`
 
 ## Products vs skill
 

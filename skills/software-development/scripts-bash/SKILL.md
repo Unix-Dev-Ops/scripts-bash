@@ -1,7 +1,7 @@
 ---
 name: scripts-bash
 description: "Use when writing, revising, or reviewing long-lived bash installer/manager scripts. Enforces a rigid ops-script standard: fixed header, SCREAMING_SNAKE_CASE globals, ANSI log lines, spinner suite, case-driven routines, and hard verification gates."
-version: 4.2.0
+version: 4.2.1
 author: Vituvo
 license: MIT
 platforms: [linux]
@@ -29,7 +29,7 @@ Standard for **long-lived bash installer / manager scripts**. Not for one-liners
 
 | | What | Where |
 |--|------|--------|
-| **Skill** | Rules, template, variable registry, one minimal example | This skill directory |
+| **Skill** | Rules, single template, variable registry, authoring | This skill directory |
 | **Products** | Scripts you run day to day | Profile workspace (outside the skill) |
 
 Default product layout (relative to the active Hermes profile home):
@@ -40,7 +40,7 @@ workspace/
   scripts/<purpose>/<name>.sh
 ```
 
-Do **not** write live products into the skill tree. Copy `templates/template-base.sh` (or `references/template-base.sh`) out to the product path.
+Do **not** write live products into the skill tree. Copy **`templates/template-base.sh`** out to the product path.
 
 ## Package contents (lean)
 
@@ -48,22 +48,20 @@ Do **not** write live products into the skill tree. Copy `templates/template-bas
 SKILL.md
 README.md
 PUBLISH.md
-references/template-base.sh
+templates/template-base.sh                      # ONLY executable skeleton
 references/screaming-snake-case-variables.md
-references/authoring.md               # tutorial: how to use this skill
-templates/template-base.sh            # same skeleton
-examples/minimal-service-installer.sh # ship-safe sample only
+references/authoring.md
 ```
 
-No production installer trees. No host-specific prompt packs.
+One skeleton only. No duplicate templates. No `examples/` clone of the same file. No symlinks.
 
 ## Tutorial
 
-Read **`references/authoring.md`** first time you use the skill. It is the human/agent walkthrough (5-step recipe, good vs bad output, smoke test for reviewers).
+Read **`references/authoring.md`** first time you use the skill.
 
 ## Precedence
 
-1. `references/template-base.sh` (executable truth)
+1. `templates/template-base.sh` (executable truth — single file)
 2. This `SKILL.md`
 3. `references/screaming-snake-case-variables.md` (append-only globals)
 4. `references/authoring.md` (how to apply the law)
@@ -71,7 +69,7 @@ Read **`references/authoring.md`** first time you use the skill. It is the human
 ## Workflow
 
 1. Load this skill; skim `references/authoring.md` if new
-2. Read `references/template-base.sh`
+2. Read `templates/template-base.sh`
 3. Read variable registry before adding globals
 4. Copy template → product path under profile `workspace/`
 5. Fill header, vars, domain functions; keep skeleton helpers stable
@@ -136,7 +134,7 @@ Globals SCREAMING_SNAKE; function locals lowercase. Document new globals in the 
 
 ## Standard functions
 
-Copy from the template. Do not re-invent.
+Copy from `templates/template-base.sh`. Do not re-invent.
 
 - `trap_exit` — SIGINT/TERM, kill spinner, Stopped, `sexit`, exit 1
 - `display_start_message` — banner gated on `DEBUG` only
@@ -156,7 +154,7 @@ Copy from the template. Do not re-invent.
 
 ## Craft bar (master-script expectations)
 
-House style uses **explicit exit checks** + `sexit; exit 1` (see golden installers). Do **not** slap `set -euo pipefail` on a large installer unless you re-audit every command; optional on small new scripts if you understand `set -e` + pipelines.
+House style uses **explicit exit checks** + `sexit; exit 1`. Do **not** slap `set -euo pipefail` on a large installer unless you re-audit every command; optional on small new scripts if you understand `set -e` + pipelines.
 
 | Expectation | Rule |
 |-------------|------|
@@ -164,28 +162,28 @@ House style uses **explicit exit checks** + `sexit; exit 1` (see golden installe
 | Tests | Prefer `[[ ... ]]` over `[ ... ]`. |
 | Spinner + exit | Capture `cmd_exit=$?` **before** `stop_spinner`; then branch on `cmd_exit`. |
 | dryrun | Prefer a `dryrun` routine that prints planned actions and exits 0 with no changes. |
-| Idempotent install | Re-run install safely when already installed (skip clone, reuse container, etc.). |
-| Dependencies | Check `command -v` for required tools; fail with install hint, no surprise package installs. |
-| Privileged ops | No `sudo` unless user explicitly approved this script/run. |
-| Secrets | Never embed keys/tokens; read from env or document external setup. |
-| shellcheck | Run when available; justify any remaining warnings. |
-| Port conflicts | Document and enforce mutual exclusion (e.g. only one listener on a shared port). |
-| Dual skill copies | Edit global skill first; `cp -a` to profile mirror. |
+| Idempotent install | Re-run install safely when already installed. |
+| Dependencies | Check `command -v`; fail with install hint, no surprise package installs. |
+| Privileged ops | No `sudo` unless user explicitly approved. |
+| Secrets | Never embed keys/tokens. |
+| shellcheck | Run when available; justify remaining warnings. |
+| Port conflicts | Document and enforce mutual exclusion. |
+| Dual skill installs | Edit global skill first; `cp -a` to profile mirror and git repo skill tree. |
 
 ## Pitfalls
 
+- Duplicate skeleton files inside the skill (forbidden — one template only)
 - Shipping fat production installers inside the skill
-- Dual divergent copies of this skill (edit one place, sync the other)
+- Divergent skill copies (global / profile / github out of sync)
 - `START` as timer name (collides with `start` routine)
 - `show_usage` calling `sexit`
 - Blind `set -e` on scripts full of intentional non-zero tests
-- Forgetting `stop_spinner` on failure paths (leaves junk on the TTY)
+- Forgetting `stop_spinner` on failure paths
 - Skill name confusion: skill is **`scripts-bash`**, profile may be named `coder-bash`
 
 ## Version
 
-- **4.2.0** — Craft bar (quote/[[ ]]/spinner exit/dryrun/idempotency); SOUL/AGENTS alignment; skill name clarity
-- **4.1.1** — Added `references/authoring.md` tutorial; host design briefs stay outside skill
-- **4.1.0** — Lean hub package: no production installers, no host prompt pack, no v3 archive dump
+- **4.2.1** — Single template at `templates/template-base.sh`; removed duplicate references/examples copies
+- **4.2.0** — Craft bar; SOUL/AGENTS alignment
+- **4.1.x** — Authoring tutorial; lean hub package
 - **4.0.0** — Initial hub-oriented layout
-- **3.x** — Spinner suite / SCRIPT_START / sleep 0.05 (superseded prose)

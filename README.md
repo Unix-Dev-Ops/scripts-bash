@@ -81,16 +81,14 @@ Full walkthrough: [`skills/software-development/scripts-bash/references/authorin
 
 ```text
 skills/software-development/scripts-bash/
-  SKILL.md                                      # Hermes skill entry
-  references/template-base.sh                   # executable skeleton (source of truth)
-  references/screaming-snake-case-variables.md  # global name registry
-  references/authoring.md                       # how to create excellent scripts
-  templates/template-base.sh
-  examples/minimal-service-installer.sh         # ship-safe sample only
+  SKILL.md
+  templates/template-base.sh                    # ONLY executable skeleton
+  references/screaming-snake-case-variables.md
+  references/authoring.md
   README.md / PUBLISH.md
 ```
 
-**Not in this repo:** private production installers, host design briefs, API keys, Kaggle/Google app code.
+**Not in this repo:** private production installers, host design briefs, API keys, duplicate templates.
 
 ## What "good" looks like
 
