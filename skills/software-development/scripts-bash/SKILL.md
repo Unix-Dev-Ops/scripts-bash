@@ -1,7 +1,7 @@
 ---
 name: scripts-bash
-description: "Use when writing, revising, or reviewing long-lived bash installer/manager scripts. Enforces a rigid ops-script standard: fixed header, SCREAMING_SNAKE_CASE globals, ANSI log lines, spinner suite, case-driven routines, and hard verification gates."
-version: 4.2.1
+description: "Use when creating, writing, rewriting, revising, restyling, or reviewing any bash (.sh) installer/manager/automation script—especially short user prompts like 'rewrite this script: /path/foo.sh'. Auto-applies rigid ops-script standard: fixed header, SCREAMING_SNAKE_CASE, ANSI logs, spinners, ROUTINE/case, sexit, craft bar. On rewrite: write version-bumped sibling (name.sh→name-01.sh, name-01.sh→name-02.sh); do not overwrite source unless asked."
+version: 4.2.2
 author: Vituvo
 license: MIT
 platforms: [linux]
@@ -17,9 +17,19 @@ Standard for **long-lived bash installer / manager scripts**. Not for one-liners
 
 ## When to use
 
-- Create or revise an installer/manager script
-- Enforce house style: header, colors, spinners, `ROUTINE` + `case`
-- Review a script against this spec
+- **Any** create / write / rewrite / restyle / fix / review of a `.sh` file in coder-bash
+- Short prompts: `rewrite this script: /path/to/foo.sh` (load this skill automatically; user need not list steps)
+- Installer/manager automation under profile `workspace/`
+
+## Rewrite output naming (automatic)
+
+| Source | Output (same directory) |
+|--------|-------------------------|
+| `name.sh` | `name-01.sh` |
+| `name-01.sh` | `name-02.sh` |
+| `name-NN.sh` | `name-(NN+1).sh` (2-digit pad) |
+
+Do not overwrite source unless user says overwrite. Keep behavior; apply full style law.
 
 ## When NOT to use
 
@@ -183,6 +193,7 @@ House style uses **explicit exit checks** + `sexit; exit 1`. Do **not** slap `se
 
 ## Version
 
+- **4.2.2** — Auto rewrite triggers; version-bump output paths (name.sh→name-01.sh…)
 - **4.2.1** — Single template at `templates/template-base.sh`; removed duplicate references/examples copies
 - **4.2.0** — Craft bar; SOUL/AGENTS alignment
 - **4.1.x** — Authoring tutorial; lean hub package
