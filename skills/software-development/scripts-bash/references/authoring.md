@@ -13,6 +13,21 @@ How to use this skill to produce excellent long-lived bash installer/manager scr
 
 You are not "vibe coding from zero." You are **filling a rigid form** with domain details.
 
+
+## Short rewrite (automatic)
+
+User says only: `Rewrite this script: /path/to/foo.sh`
+
+Agent must:
+
+1. Load scripts-bash from `~/.hermes/skills/software-development/scripts-bash/`
+2. Read source
+3. Write version-bumped sibling in the **same directory** (`.foo.sh` → `.foo-01.sh`)
+4. **Issue write_file without preamble** (no "Writing now" status essays)
+5. `bash -n`; report path + size only
+
+User does not list skill files or steps.
+
 ## 5-step recipe
 
 ### 1. Load the skill

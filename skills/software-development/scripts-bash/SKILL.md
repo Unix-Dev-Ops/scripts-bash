@@ -1,7 +1,7 @@
 ---
 name: scripts-bash
 description: "Use when creating, writing, rewriting, revising, restyling, or reviewing any bash (.sh) installer/manager/automation script—especially short user prompts like 'rewrite this script: /path/foo.sh'. Auto-applies rigid ops-script standard: fixed header, SCREAMING_SNAKE_CASE, ANSI logs, spinners, ROUTINE/case, sexit, craft bar. On rewrite: write version-bumped sibling (name.sh→name-01.sh, name-01.sh→name-02.sh); do not overwrite source unless asked."
-version: 4.2.3
+version: 4.2.4
 author: Vituvo
 license: MIT
 platforms: [linux]
@@ -26,10 +26,28 @@ Standard for **long-lived bash installer / manager scripts**. Not for one-liners
 | Source | Output (same directory) |
 |--------|-------------------------|
 | `name.sh` | `name-01.sh` |
+| `.name.sh` | `.name-01.sh` (leading dot preserved) |
 | `name-01.sh` | `name-02.sh` |
 | `name-NN.sh` | `name-(NN+1).sh` (2-digit pad) |
 
 Do not overwrite source unless user says overwrite. Keep behavior; apply full style law.
+Dotfile / hidden names are normal — not special-case blockers.
+
+## Live skill path
+
+Install / load from:
+
+`~/.hermes/skills/software-development/scripts-bash/`
+
+Do not require a copy under `profiles/*/skills/`. If lookup fails under a profile, use this absolute path.
+
+## Execution discipline (rewrites)
+
+1. Load this skill + read source in early tool calls.
+2. **Call `write_file` in the same turn you decide to write** — no "Writing now." / "Resuming…" without a tool call.
+3. No multi-paragraph status recaps between tools.
+4. After write: `bash -n`; chat reports path + size only.
+5. If a prior turn stalled before write: **retry write immediately**.
 
 ## When NOT to use
 
@@ -193,6 +211,7 @@ House style uses **explicit exit checks** + `sexit; exit 1`. Do **not** slap `se
 
 ## Version
 
+- **4.2.4** — Global path only; no-preamble write discipline; dotfile version bump
 - **4.2.3** — Single live install; no profile skill copy; git = publish only
 - **4.2.2** — Auto rewrite triggers; version-bump output paths (name.sh→name-01.sh…)
 - **4.2.1** — Single template at `templates/template-base.sh`; removed duplicate references/examples copies
