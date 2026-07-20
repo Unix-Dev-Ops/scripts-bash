@@ -12,25 +12,16 @@ skills/software-development/scripts-bash/
   references/authoring.md
 ```
 
-## Do not ship
+## Local (this machine)
 
-- Duplicate skeletons (`references/template-base.sh`, `examples/` clone)
-- Full production installer trees
-- Profile `workspace/prompts/` design briefs
-- Symlinks
-- Secrets / host-private paths as requirements
+- Git / push: `~/.hermes/projects/scripts-bash`
+- Live Hermes (coder-bash): `~/.hermes/profiles/coder-bash/skills/scripts-bash/`
+- After edit: keep those two trees identical (`cp -a`)
+
+No third global copy under `~/.hermes/skills/`.
 
 ## Checks
 
 ```bash
 bash -n templates/template-base.sh
-# frontmatter: name, description starts with "Use when"
 ```
-
-## Local installs
-
-Canonical: `~/.hermes/skills/software-development/scripts-bash/`  
-Mirror: `~/.hermes/profiles/<name>/skills/scripts-bash/`  
-Git: `~/.hermes/projects/scripts-bash/skills/software-development/scripts-bash/`
-
-After edits: update canonical, then `cp -a` to profile mirror and git skill tree.
