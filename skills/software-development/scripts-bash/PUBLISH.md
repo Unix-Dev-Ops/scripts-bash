@@ -12,13 +12,15 @@ skills/software-development/scripts-bash/
   references/authoring.md
 ```
 
-## Local (this machine)
+## This machine — three installs (keep identical)
 
-- Git / push: `~/.hermes/projects/scripts-bash`
-- Live Hermes (coder-bash): `~/.hermes/profiles/coder-bash/skills/scripts-bash/`
-- After edit: keep those two trees identical (`cp -a`)
+| Role | Path |
+|------|------|
+| Global | `~/.hermes/skills/software-development/scripts-bash/` |
+| coder-bash profile | `~/.hermes/profiles/coder-bash/skills/scripts-bash/` |
+| Git push | `~/.hermes/projects/scripts-bash/` |
 
-No third global copy under `~/.hermes/skills/`.
+Do **not** remove the global skill. After edits: `cp -a` across all three.
 
 ## Checks
 
