@@ -74,6 +74,39 @@ bash -n path/to/script.sh
 
 Agent: full script only; path+size in chat; bump Ver; leave Title Case comments alone unless asked.
 
+## Interactive creation
+
+Use this path only when the user asks to **create a brand-new script from scratch** (not a rewrite of an existing file).
+
+**Ask exactly one question at a time.** Wait for the answer before asking the next. Never present a multi-question list.
+
+**Q1. Script name** — exact filename, e.g. `installer-camofox.sh`
+
+→ Wait for answer.
+
+**Q2. Purpose** — one-line purpose statement that goes into the `Define:` header line
+
+→ Wait for answer.
+
+**Q3. Case routines?** — Do you want case routines (arguments)? Answer Yes or No.
+
+→ Wait for answer.
+
+- If **No**, skip to Q5.
+- If **Yes**, ask each routine on its own turn: "Routine name and one-line description:" — repeat for each.
+
+**Q4. ROUTine list** — for each routine, ask separately: name + one-line description.
+
+→ Wait after each.
+
+**Q5. DEBUG value** — `true` or `false`
+
+→ Wait for answer.
+
+**Q6. Extra constraints** — any extra paths, ports, or constraints? Reply "none" if nothing to add.
+
+→ After the final answer, copy `templates/template-base.sh` to the product path, fill the header and case block, then write the complete script.
+
 ## What good output looks like
 
 - Header Author/Date/Ver/Name/Define, columns aligned
