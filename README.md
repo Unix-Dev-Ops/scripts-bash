@@ -1,32 +1,36 @@
 # scripts-bash
 
 [![Hermes Skill](https://img.shields.io/badge/Hermes-Skill-7c3aed?style=flat-square)](https://github.com/NousResearch/hermes-agent)
-[![Category](https://img.shields.io/badge/category-software--development-0ea5e9?style=flat-square)](#install)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
-> **MCP gives Hermes tools. Skills give Hermes judgment. `scripts-bash` gives Hermes a standard for the bash that runs your stack.**
-
-**Current skill version: 4.3.0**
+**Version 4.3.0** — house style for long-lived bash installer and manager scripts.
 
 ![scripts-bash hero - Hermes-grade bash installers](docs/assets/scripts-bash-hero.png)
 
-## Why this exists
+## What is in this repo
 
-Hermes already orchestrates terminal, files, profiles, cron, and secrets. What it still needs for serious ops work is a **rigid house style** so every installer looks the same, fails cleanly, and reads like a product.
+| File | What it is |
+|------|------------|
+| `skills/software-development/scripts-bash/SKILL.md` | The rules. 277 lines, `version: 4.3.0` in frontmatter. |
+| `.../templates/template-base.sh` | The one executable skeleton. 216 lines, 9 functions. |
+| `.../references/screaming-snake-case-variables.md` | 39 global variables with definitions. |
+| `.../references/authoring.md` | How to apply the rules. |
+| `SECURITY.md` | How to report issues, plus bash failure modes this skill treats as security-relevant. |
+| `docs/assets/scripts-bash-hero.png` | 1536 × 1024 image above. |
 
-`scripts-bash` teaches Hermes (and you) to ship bash with:
+The skill ships **one** template. There is no second copy and no `examples/` directory. CI fails the build if either reappears.
 
-| Pillar | What you get |
-|--------|----------------|
-| **Locked skeleton** | Header, colors, spinners, `ROUTINE` + `case`, `sexit` footer |
-| **Stable names** | SCREAMING_SNAKE globals with a living registry |
-| **Authoring recipe** | tutorial plus the clone-an-installer recipe |
-| **Craft bar** | Quote discipline, `[[ ]]`, dryrun, idempotent install, no secret dumps |
-| **Lean package** | Skill law only - your host installers stay in your workspace |
+```text
+skills/software-development/scripts-bash/
+  SKILL.md
+  templates/template-base.sh
+  references/screaming-snake-case-variables.md
+  references/authoring.md
+```
 
-Complements Hermes. Does not replace it. Does not claim to be a general "learn bash" course.
+This repo is the skill. It does not contain production installers.
 
-## Install (Hermes drop-in)
+## Install
 
 ```bash
 git clone https://github.com/Unix-Dev-Ops/scripts-bash.git
@@ -35,105 +39,46 @@ cp -a scripts-bash/skills/software-development/scripts-bash \
   ~/.hermes/skills/software-development/
 ```
 
-In a Hermes session:
+That lands at `~/.hermes/skills/software-development/scripts-bash/`. Load it by name (`scripts-bash`). Do not also copy it into a Hermes profile — a second copy stops tracking this tree the day either one is edited.
+
+## What the skeleton does
+
+`templates/template-base.sh` defines nine functions. Reuse them; do not rewrite them:
+
+`trap_exit` `display_start_message` `sexit` `show_banner` `wait_spinner`
+`start_spinner` `stop_spinner` `show_usage` `check_arguments`
+
+Its usage screen advertises three routines:
 
 ```text
-/reload-skills
-/skill scripts-bash
+install      Install and configure
+uninstall    Remove everything
+status       Show current status
 ```
 
-**Don't mirror it into a profile.** One pointer is the install. A copy under
-`~/.hermes/profiles/<profile>/skills/` is a second source of truth that silently stops
-tracking the repo the day either one gets edited.
+Add more only when the product needs them. `show_usage` exits 0 **without** calling `sexit`; success paths end in `sexit`.
 
-Standing rule (recommended in SOUL / AGENTS):
+## Verify
 
-```text
-For long-lived bash installer/manager scripts: load skill scripts-bash first.
-Products go under profile workspace/installers/ or workspace/scripts/.
-```
-
-## Quickstart
-
-```text
-Load scripts-bash, then copy templates/template-base.sh to
-workspace/installers/<tool>/installer-<tool>.sh and build me an installer
-for <tool>. It installs under ~/.hermes-programs/<tool>/, serves on one port of
-my choosing, uses no sudo, and exposes install / update / start / stop / status /
-uninstall.
-```
-
-Then verify before you run anything:
-
-```bash
-bash -n workspace/installers/<tool>/installer-<tool>.sh
-shellcheck -x workspace/installers/<tool>/installer-<tool>.sh   # CI runs both
-bash workspace/installers/<tool>/installer-<tool>.sh status
-```
-
-Full walkthrough: [`skills/software-development/scripts-bash/references/authoring.md`](skills/software-development/scripts-bash/references/authoring.md)
-
-## Package layout
-
-```text
-skills/software-development/scripts-bash/
-  SKILL.md
-  templates/template-base.sh                    # ONLY executable skeleton
-  references/screaming-snake-case-variables.md
-  references/authoring.md
-  README.md
-```
-
-**Not in this repo:** private production installers, host design briefs, API keys, duplicate templates.
-
-## What "good" looks like
-
-- Author / Date / Ver / Name / Define header (column-aligned)
-- Braille spinners + clean Ctrl+C (`SPINNER_PID` + trap)
-- Green labels, cyan body, bright-red errors - cinematic `sleep 0.05` pacing
-- `cmd_exit=$?` **before** `stop_spinner`
-- `show_usage` exits 0 **without** the Completed footer; success paths end in `sexit`
-- Prefer explicit failure checks on large installers (house style); do not blind-apply `set -e`
+CI on `main` and pull requests runs `bash -n` and `shellcheck -x` against `templates/template-base.sh`, and asserts there is no duplicate template and no `examples/` directory.
 
 ## Contributing
 
-PRs welcome. Review comes from the maintainer listed in [CODEOWNERS](.github/CODEOWNERS);
-nothing enforces it mechanically, so treat it as a human convention. CI runs `bash -n`
-and `shellcheck` against the template on every push and pull request, so a change that
-breaks the skeleton is caught there, not by hand.
+PRs are reviewed by the maintainer in [CODEOWNERS](.github/CODEOWNERS).
 
-The four rules that keep this repo a skill and not a script dump:
-
-- **Scope** - skill law, template, registry, authoring docs. No host-specific production
-  installers, no secrets, no personal machine paths that a change would depend on.
-- **One concern per change** - "fix the spinner colon rule", not "rewrite everything".
-- **Style is not optional** - match `SKILL.md` and `templates/template-base.sh`; there is
-  no second banner system.
-- **Registry** - append to `screaming-snake-case-variables.md`. Never rename an existing
-  entry without a migration note and maintainer sign-off.
-
-Commits follow Conventional Commits (`feat:` `fix:` `docs:` `refactor:` `chore:`).
-`main` is cut by the maintainer, so everything on it is releasable as-is.
+- **Scope** — rules, one template, the registry, and how-to docs. No host-specific production installers, no secrets.
+- **One concern per change** — "fix the spinner colon rule", not "rewrite everything".
+- **Style is not optional** — match `SKILL.md` and the template.
+- **Registry is append-only** — never rename an existing entry without a migration note and maintainer sign-off.
 
 ## Security
 
-
-See [SECURITY.md](SECURITY.md) to report a vulnerability. It also lists the
-bash failure modes this skill treats as security-relevant.
-
-## Related
-
-| Project | Role |
-|---------|------|
-| [Hermes Agent](https://github.com/NousResearch/hermes-agent) | The agent this skill serves |
-| [Hermes docs](https://hermes-agent.nousresearch.com/docs) | Official documentation |
+See [SECURITY.md](SECURITY.md).
 
 ## Author
 
 **Vituvo** ([@Unix-Dev-Ops](https://github.com/Unix-Dev-Ops))
 
-For Hermes operators who manage Docker, local inference, and agent infrastructure.
-
 ## License
 
-[MIT](LICENSE) - Copyright (c) 2026 Vituvo
+[MIT](LICENSE) — Copyright (c) 2026 Vituvo
